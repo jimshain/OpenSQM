@@ -1,0 +1,6 @@
+<Context>
+	<Resource name="jdbc/OpenSQM" auth="Container" type="javax.sql.DataSource"
+		maxActive="100" maxIdle="30" maxWait="10000" username="OpenSQM"
+		password="OpenSQM" driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://jimshain.com/OpenSQM" />
+</Context>
