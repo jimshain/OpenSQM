@@ -10,7 +10,23 @@
 		var dialog, form;
 
 		function addCategory() {
-			alert("submitting");
+			$
+					.ajax({
+						method : "POST",
+						url : "categoryAddWeb",
+						data : "{text:\"New Category\", weight:\"99\"}",
+						datatype : "application/json",
+						contentType : "text/plain",
+						success : function(result) {
+							var resp = JSON.parse(result);
+							alert(result);
+							if (resp.status.code == "0") {
+								$('table#categoryTbl TBODY')
+										.append(
+												'<tr><td>New Category</td><td>99</td><td>Change</td></tr>');
+							}
+						}
+					});
 			dialog.dialog("close");
 		}
 
@@ -20,7 +36,7 @@
 			width : 450,
 			modal : true,
 			buttons : {
-			    "Add": addCategory,
+				"Add" : addCategory,
 				"Cancel" : function() {
 					dialog.dialog("close");
 				}
@@ -32,7 +48,7 @@
 		});
 
 		form = dialog.find("form").on("submit", function(event) {
-		alert("submitted");
+			alert("submitted");
 		});
 
 		$("#newCategory").button().on("click", function() {
@@ -62,21 +78,27 @@
 			<th></th>
 		</tr>
 	</table>
-	
-		<div id="dialog-form" title="Category">
+
+	<div id="dialog-form" title="Category">
 		<form>
 			<fieldset>
-			<table>
-			<tr><td>Category:</td><td><input type="text"></td></tr>
-			<tr><td>Weight:</td><td><input type="text"></td></tr>
-			</table>
+				<table>
+					<tr>
+						<td>Category:</td>
+						<td><input type="text"></td>
+					</tr>
+					<tr>
+						<td>Weight:</td>
+						<td><input type="text"></td>
+					</tr>
+				</table>
 				<!-- Allow form submission with keyboard without duplicating the dialog button -->
-				<input type="submit" tabindex="-1"
+				<input tabindex="-1" id="addButton"
 					style="position:absolute; top:-1000px">
 			</fieldset>
 		</form>
 	</div>
-	
+
 </body>
 
 </html>

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.opensqm.json.Category;
+import com.opensqm.json.CategoryAddRq;
+import com.opensqm.json.CategoryAddRs;
 import com.opensqm.json.CategoryInqRq;
 import com.opensqm.json.CategoryInqRs;
 import com.opensqm.json.RequestHeader;
@@ -24,6 +27,7 @@ import com.opensqm.json.Status;
 public class CategoriesWebController {
 
 	private final static String CATEGORY_INQ_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryInq";
+	private final static String CATEGORY_ADD_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryAdd";
 
 	@RequestMapping(value = "categories", method = RequestMethod.GET)
 	public String getCategories() {
@@ -52,6 +56,32 @@ public class CategoriesWebController {
 		return json;
 	}
 
+	@RequestMapping(value = "categoryAddWeb", method = RequestMethod.POST)
+	public @ResponseBody String categoryAdd(@RequestBody String request) {
+		String json = null;
+		CategoryAddRq categoryAddRq = new CategoryAddRq();
+		CategoryAddRs categoryAddRs = null;
+		Gson gson = new Gson();
+
+		System.out.println(">>>>In categoryAdd");
+		try {
+			categoryAddRq.setRequestHeader(new RequestHeader());
+			categoryAddRq.getRequestHeader().setRquid(UUID.randomUUID().toString());
+			categoryAddRq.setCategory(new Category());
+			categoryAddRq.getCategory().setText("New Category");
+			categoryAddRq.getCategory().setWeight(55);
+			request = gson.toJson(categoryAddRq);
+			json = send(CATEGORY_ADD_URL, request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			categoryAddRs = new CategoryAddRs();
+			categoryAddRs.setStatus(new Status("999", e.toString()));
+			json = gson.toJson(categoryAddRs);
+		}
+		System.out.println(">>>>Returning the string: " + json);
+		return json;
+	}
+
 	private String send(String url, String data) throws Exception {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
@@ -72,5 +102,5 @@ public class CategoriesWebController {
 
 		return json;
 	}
-	
+
 } // Class end
