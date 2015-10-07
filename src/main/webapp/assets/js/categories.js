@@ -2,17 +2,15 @@ $(document).ready(function() {
 	$.ajax({
 		method : "POST",
 		url : "categoryInqWeb",
-		data : "",
+		data : "{}",
 		datatype : "application/json",
 		contentType : "text/plain",
 		success : function(result) {
-
 			var resp = JSON.parse(result);
-			if (resp.status.returnCode == '0') {
-				window.location.href = resp.nextUrl;
-			} else {
-				alert(resp.status.message);
-			}
+			
+			$.each(resp.categories, function(idx, elem){
+			    $('table#categoryTbl TBODY').append('<tr><td>'+elem.text+'</td><td>'+elem.weight +'</td><td>Change</td></tr>');
+			    });
 		}
 	});
 });

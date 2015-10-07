@@ -2,8 +2,9 @@
 <head>
 <title>OpenSQM Main Menu</title>
 <link rel="stylesheet" type="text/css" href="assets/css/opensqm.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="assets/js/categories.js"></script>
 <script>
 	$(function() {
 		var dialog, form;
@@ -54,36 +55,11 @@
 
 	<button id="newCategory">New Category</button>
 
-	<table>
+	<table id="categoryTbl">
 		<tr>
 			<th>Category</th>
 			<th>Weight</th>
 			<th></th>
-		</tr>
-		<tr>
-			<td>Money Transfer</td>
-			<td>20</td>
-			<td>Change</td>
-		</tr>
-		<tr>
-			<td>Check Cashing</td>
-			<td>20</td>
-			<td>Change</td>
-		</tr>
-		<tr>
-			<td>Bill Payment</td>
-			<td>15</td>
-			<td>Change</td>
-		</tr>
-		<tr>
-			<td>Credit Card</td>
-			<td>5</td>
-			<td>Change</td>
-		</tr>
-		<tr>
-			<td>Store Operations</td>
-			<td>15</td>
-			<td>Change</td>
 		</tr>
 	</table>
 	

@@ -54,6 +54,7 @@ public class CategoryInq {
 		}
 
 		categoryInqRs.setStatus(status);
+		response = gson.toJson(categoryInqRs);
 		System.out.println("response = " + response);
 		return response;
 	}
