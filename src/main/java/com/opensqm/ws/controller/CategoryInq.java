@@ -24,12 +24,18 @@ import com.opensqm.json.CategoryInqRs;
 import com.opensqm.json.ResponseHeader;
 import com.opensqm.json.Status;
 
+/**
+ * Category inquiry message handler.
+ * 
+ * @author Jim Shain
+ *
+ */
 @Controller
 public class CategoryInq {
 
 	private static final String CATEGORY_SELECT_ALL_SQL = "select CATEGORY_ID, CATEGORY_TEXT, WEIGHT from QUIZ_CATEGORY_TB";
 	private static final String CATEGORY_SELECT_BY_ID_SQL = "select CATEGORY_ID, CATEGORY_TEXT, WEIGHT from QUIZ_CATEGORY_TB where CATEGORY_ID = ?";
-	
+
 	@RequestMapping(value = "categoryInq", method = RequestMethod.POST)
 	public @ResponseBody String doCategoryInq(@RequestBody String request,
 			ModelMap model) {
@@ -43,7 +49,8 @@ public class CategoryInq {
 			categoryInqRq = gson.fromJson(request, CategoryInqRq.class);
 			validate(categoryInqRq);
 			categoryInqRs.setResponseHeader(new ResponseHeader());
-			categoryInqRs.getResponseHeader().setRquid(categoryInqRq.getRequestHeader().getRquid());
+			categoryInqRs.getResponseHeader().setRquid(
+					categoryInqRq.getRequestHeader().getRquid());
 			categoryInqRs.setCategories(inq(categoryInqRq.getCategoryId()));
 			status = new Status("0", "Success");
 		} catch (StatusException se) {
@@ -64,15 +71,16 @@ public class CategoryInq {
 			throw new StatusException("105", "CategoryInqRq must not be null.");
 		}
 		if (categoryInqRq.getRequestHeader() == null) {
-			throw new StatusException("105", "CategoryInqRq.requestHeader must not be null");
+			throw new StatusException("105",
+					"CategoryInqRq.requestHeader must not be null");
 		}
 	}
-	
+
 	private Category[] inq(String id) throws StatusException {
 		List<Category> categoryList = new ArrayList<Category>();
 		Category[] categories = null;
 		Category category = null;
-		
+
 		InitialContext initialContext = null;
 		Context context = null;
 		DataSource ds = null;
@@ -85,7 +93,7 @@ public class CategoryInq {
 			context = (Context) initialContext.lookup("java:comp/env");
 			ds = (DataSource) context.lookup("jdbc/OpenSQM");
 			conn = ds.getConnection();
-			
+
 			if (id != null && id.trim().length() > 0) {
 				pStmt = conn.prepareStatement(CATEGORY_SELECT_BY_ID_SQL);
 				pStmt.setString(1, id);
@@ -93,7 +101,7 @@ public class CategoryInq {
 				pStmt = conn.prepareStatement(CATEGORY_SELECT_ALL_SQL);
 			}
 			rs = pStmt.executeQuery();
-			
+
 			while (rs.next()) {
 				category = new Category();
 				category.setId(rs.getString(1));
@@ -101,7 +109,7 @@ public class CategoryInq {
 				category.setWeight(rs.getInt(3));
 				categoryList.add(category);
 			}
-			
+
 			categories = new Category[categoryList.size()];
 			categories = categoryList.toArray(categories);
 			rs.close();
@@ -118,5 +126,5 @@ public class CategoryInq {
 
 		return categories;
 	}
-	
+
 } // Class end

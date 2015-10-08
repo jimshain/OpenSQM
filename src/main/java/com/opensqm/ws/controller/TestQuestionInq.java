@@ -17,10 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.opensqm.json.Question;
+import com.opensqm.json.ResponseHeader;
 import com.opensqm.json.Status;
 import com.opensqm.json.TestQuestionInqRq;
 import com.opensqm.json.TestQuestionInqRs;
 
+/**
+ * Test question inquiry message handler.
+ * @author Jim Shain
+ *
+ */
 @Controller
 public class TestQuestionInq {
 
@@ -35,10 +41,16 @@ public class TestQuestionInq {
 		TestQuestionInqRs testQuestionInqRs = new TestQuestionInqRs();
 		String response = null;
 		Status status = new Status("999", "Status not set.");
+		Question question = null;
 
 		try {
 			testQuestionInqRq = gson.fromJson(request, TestQuestionInqRq.class);
-			inq("");
+			validate(testQuestionInqRq);
+			testQuestionInqRs.setResponseHeader(new ResponseHeader());
+			testQuestionInqRs.getResponseHeader().setRquid(testQuestionInqRq.getRequestHeader().getRquid());
+			question = inq(testQuestionInqRq.getRequestHeader().getUserId());
+			testQuestionInqRs.setQuestion(question);
+			status = new Status("0", "Success");
 		} catch (StatusException se) {
 			status = se.getStatus();
 		} catch (Exception e) {
@@ -50,6 +62,15 @@ public class TestQuestionInq {
 		response = gson.toJson(testQuestionInqRs);
 		return response;
 	}	
+	
+	private void validate(TestQuestionInqRq testQuestionInqRq) throws StatusException {
+		if (testQuestionInqRq == null) {
+			throw new StatusException("105", "TestQuestionInqRq must not be null.");
+		}
+		if (testQuestionInqRq.getRequestHeader() == null) {
+			throw new StatusException("105", "TestQuestionInqRq.requestHeader must not be null.");
+		}
+	}
 	
 	private Question inq(String userId) throws StatusException {
 		InitialContext initialContext = null;

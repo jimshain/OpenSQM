@@ -24,17 +24,44 @@ import com.opensqm.json.RequestHeader;
 import com.opensqm.json.Status;
 import com.opensqm.web.json.CategoryAddForm;
 
+/**
+ * Web controller to handle the category page.
+ * 
+ * @author Jim Shain
+ *
+ */
 @Controller
 public class CategoriesWebController {
 
+	/**
+	 * Category inquiry web service URL.
+	 */
+	// TODO: This is hard coded for now. Should come from a property file.
 	private final static String CATEGORY_INQ_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryInq";
+
+	/**
+	 * Category add web service URL.
+	 */
+	// TODO: This is hard coded for now. Should come from a property file.
 	private final static String CATEGORY_ADD_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryAdd";
 
+	/**
+	 * Processes the web page get.
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "categories", method = RequestMethod.GET)
 	public String getCategories() {
 		return "categories";
 	}
 
+	/**
+	 * Processes the category inquiry request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
 	@RequestMapping(value = "categoryInqWeb", method = RequestMethod.POST)
 	public @ResponseBody String categoryInq(@RequestBody String request) {
 		Gson gson = new Gson();
@@ -57,6 +84,13 @@ public class CategoriesWebController {
 		return json;
 	}
 
+	/**
+	 * Processes the category add request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
 	@RequestMapping(value = "categoryAddWeb", method = RequestMethod.POST)
 	public @ResponseBody String categoryAdd(@RequestBody String request) {
 		String json = null;
@@ -65,14 +99,15 @@ public class CategoriesWebController {
 		Gson gson = new Gson();
 		CategoryAddForm categoryAddForm = null;
 
-		System.out.println(">>>>In categoryAdd");
 		try {
 			categoryAddForm = gson.fromJson(request, CategoryAddForm.class);
 			categoryAddRq.setRequestHeader(new RequestHeader());
-			categoryAddRq.getRequestHeader().setRquid(UUID.randomUUID().toString());
+			categoryAddRq.getRequestHeader().setRquid(
+					UUID.randomUUID().toString());
 			categoryAddRq.setCategory(new Category());
 			categoryAddRq.getCategory().setText(categoryAddForm.getText());
-			categoryAddRq.getCategory().setWeight(Integer.parseInt(categoryAddForm.getWeight()));
+			categoryAddRq.getCategory().setWeight(
+					Integer.parseInt(categoryAddForm.getWeight()));
 			request = gson.toJson(categoryAddRq);
 			json = send(CATEGORY_ADD_URL, request);
 		} catch (Exception e) {
@@ -81,7 +116,6 @@ public class CategoriesWebController {
 			categoryAddRs.setStatus(new Status("999", e.toString()));
 			json = gson.toJson(categoryAddRs);
 		}
-		System.out.println(">>>>Returning the string: " + json);
 		return json;
 	}
 

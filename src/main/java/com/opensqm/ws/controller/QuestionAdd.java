@@ -27,6 +27,8 @@ import com.opensqm.json.Status;
 
 /**
  * Question add controller.
+ * 
+ * @author Jim Shain
  *
  */
 @Controller
@@ -36,12 +38,12 @@ public class QuestionAdd {
 	 * Question add SQL
 	 */
 	private static final String QUESTION_ADD_SQL = "insert into QUIZ_QUESTION_TB values (?, ?, ?, ?)";
-	
+
 	/**
 	 * Choice add SQL
 	 */
 	private static final String CHOICE_ADD_SQL = "insert into QUIZ_CHOICE_TB value (?, ?, ?, ?)";
-	
+
 	/**
 	 * Question category add SQL
 	 */
@@ -49,6 +51,7 @@ public class QuestionAdd {
 
 	/**
 	 * Question add.
+	 * 
 	 * @param request
 	 * @param model
 	 * @return
@@ -68,7 +71,8 @@ public class QuestionAdd {
 			questionAddRq = gson.fromJson(request, QuestionAddRq.class);
 			validate(questionAddRq);
 			questionAddRs.setResponseHeader(new ResponseHeader());
-			questionAddRs.getResponseHeader().setRquid(questionAddRq.getRequestHeader().getRquid());
+			questionAddRs.getResponseHeader().setRquid(
+					questionAddRq.getRequestHeader().getRquid());
 			add(questionAddRq.getQuestion());
 			status = new Status("0", "Success");
 		} catch (StatusException se) {
@@ -89,7 +93,8 @@ public class QuestionAdd {
 			throw new StatusException("105", "QuestionAddRq must not be null.");
 		}
 		if (questionAddRq.getRequestHeader() == null) {
-			throw new StatusException("105", "QuestionAddRq.requestHeader must not be null");
+			throw new StatusException("105",
+					"QuestionAddRq.requestHeader must not be null");
 		}
 		if (questionAddRq.getQuestion() == null) {
 			throw new StatusException("105",
@@ -145,15 +150,13 @@ public class QuestionAdd {
 				}
 			}
 
-			// Add the categories
-			if (question.getCategories() != null) {
-				for (String category : question.getCategories()) {
-					pStmt = conn.prepareStatement(QUESTION_CATEGORY_ADD_SQL);
-					pStmt.setString(1, rquid);
-					pStmt.setString(2, category);
-					pStmt.execute();
-					pStmt.close();
-				}
+			// Add the category
+			if (question.getCategoryId() != null) {
+				pStmt = conn.prepareStatement(QUESTION_CATEGORY_ADD_SQL);
+				pStmt.setString(1, rquid);
+				pStmt.setString(2, question.getCategoryId());
+				pStmt.execute();
+				pStmt.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
