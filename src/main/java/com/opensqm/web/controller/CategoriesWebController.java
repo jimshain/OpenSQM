@@ -22,6 +22,7 @@ import com.opensqm.json.CategoryInqRq;
 import com.opensqm.json.CategoryInqRs;
 import com.opensqm.json.RequestHeader;
 import com.opensqm.json.Status;
+import com.opensqm.web.json.CategoryAddForm;
 
 @Controller
 public class CategoriesWebController {
@@ -62,14 +63,16 @@ public class CategoriesWebController {
 		CategoryAddRq categoryAddRq = new CategoryAddRq();
 		CategoryAddRs categoryAddRs = null;
 		Gson gson = new Gson();
+		CategoryAddForm categoryAddForm = null;
 
 		System.out.println(">>>>In categoryAdd");
 		try {
+			categoryAddForm = gson.fromJson(request, CategoryAddForm.class);
 			categoryAddRq.setRequestHeader(new RequestHeader());
 			categoryAddRq.getRequestHeader().setRquid(UUID.randomUUID().toString());
 			categoryAddRq.setCategory(new Category());
-			categoryAddRq.getCategory().setText("New Category");
-			categoryAddRq.getCategory().setWeight(55);
+			categoryAddRq.getCategory().setText(categoryAddForm.getText());
+			categoryAddRq.getCategory().setWeight(Integer.parseInt(categoryAddForm.getWeight()));
 			request = gson.toJson(categoryAddRq);
 			json = send(CATEGORY_ADD_URL, request);
 		} catch (Exception e) {

@@ -1,4 +1,7 @@
-button {
+section.flat{
+	padding-bottom:30px;
+}
+section.flat button {
   display: inline-block;
   margin: 0 10px 0 0;
   padding: 15px 30px;
@@ -10,7 +13,7 @@ button {
   border-radius: 0;
 }
 
-button:focus {
+section.flat button:focus {
   outline: none
 }
 
