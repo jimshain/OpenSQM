@@ -1,12 +1,12 @@
 package com.opensqm.web.json;
 
 /**
- * Category add form java object.
+ * Category modify form java object.
  * 
  * @author Jim Shain
  *
  */
-public class CategoryAddForm {
+public class CategoryModForm {
 
 	/**
 	 * Text
@@ -21,7 +21,7 @@ public class CategoryAddForm {
 	/**
 	 * Default constructor
 	 */
-	public CategoryAddForm() {
+	public CategoryModForm() {
 	}
 
 	/**

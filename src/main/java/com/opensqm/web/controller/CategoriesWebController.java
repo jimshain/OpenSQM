@@ -18,11 +18,17 @@ import com.google.gson.Gson;
 import com.opensqm.json.Category;
 import com.opensqm.json.CategoryAddRq;
 import com.opensqm.json.CategoryAddRs;
+import com.opensqm.json.CategoryDelRq;
+import com.opensqm.json.CategoryDelRs;
 import com.opensqm.json.CategoryInqRq;
 import com.opensqm.json.CategoryInqRs;
+import com.opensqm.json.CategoryModRq;
+import com.opensqm.json.CategoryModRs;
 import com.opensqm.json.RequestHeader;
 import com.opensqm.json.Status;
 import com.opensqm.web.json.CategoryAddForm;
+import com.opensqm.web.json.CategoryDelForm;
+import com.opensqm.web.json.CategoryModForm;
 
 /**
  * Web controller to handle the category page.
@@ -44,7 +50,19 @@ public class CategoriesWebController {
 	 */
 	// TODO: This is hard coded for now. Should come from a property file.
 	private final static String CATEGORY_ADD_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryAdd";
+	
+	/**
+	 * Category modify web service URL.
+	 */
+	// TODO: This is hard coded for now. Should come from a property file.
+	private final static String CATEGORY_MOD_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryMod";
 
+	/**
+	 * Category delete web service URL.
+	 */
+	// TODO: This is hard coded for now. Should come from a property file.
+	private final static String CATEGORY_DEL_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryMod";
+	
 	/**
 	 * Processes the web page get.
 	 * 
@@ -115,6 +133,74 @@ public class CategoriesWebController {
 			categoryAddRs = new CategoryAddRs();
 			categoryAddRs.setStatus(new Status("999", e.toString()));
 			json = gson.toJson(categoryAddRs);
+		}
+		return json;
+	}
+
+	
+	/**
+	 * Processes the category modify request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
+	@RequestMapping(value = "categoryModWeb", method = RequestMethod.POST)
+	public @ResponseBody String categoryMod(@RequestBody String request) {
+		String json = null;
+		CategoryModRq categoryModRq = new CategoryModRq();
+		CategoryModRs categoryModRs = null;
+		Gson gson = new Gson();
+		CategoryModForm categoryModForm = null;
+
+		try {
+			categoryModForm = gson.fromJson(request, CategoryModForm.class);
+			categoryModRq.setRequestHeader(new RequestHeader());
+			categoryModRq.getRequestHeader().setRquid(
+					UUID.randomUUID().toString());
+			categoryModRq.setCategory(new Category());
+			categoryModRq.getCategory().setText(categoryModForm.getText());
+			categoryModRq.getCategory().setWeight(
+					Integer.parseInt(categoryModForm.getWeight()));
+			request = gson.toJson(categoryModRq);
+			json = send(CATEGORY_MOD_URL, request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			categoryModRs = new CategoryModRs();
+			categoryModRs.setStatus(new Status("999", e.toString()));
+			json = gson.toJson(categoryModRs);
+		}
+		return json;
+	}
+
+	/**
+	 * Processes the category delete request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
+	@RequestMapping(value = "categoryDelWeb", method = RequestMethod.POST)
+	public @ResponseBody String categoryDel(@RequestBody String request) {
+		String json = null;
+		CategoryDelRq categoryDelRq = new CategoryDelRq();
+		CategoryDelRs categoryDelRs = null;
+		Gson gson = new Gson();
+		CategoryDelForm categoryDelForm = null;
+
+		try {
+			categoryDelForm = gson.fromJson(request, CategoryDelForm.class);
+			categoryDelRq.setRequestHeader(new RequestHeader());
+			categoryDelRq.getRequestHeader().setRquid(
+					UUID.randomUUID().toString());
+			categoryDelRq.setCategoryId(categoryDelForm.getCategoryId());
+			request = gson.toJson(categoryDelRq);
+			json = send(CATEGORY_DEL_URL, request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			categoryDelRs = new CategoryDelRs();
+			categoryDelRs.setStatus(new Status("999", e.toString()));
+			json = gson.toJson(categoryDelRs);
 		}
 		return json;
 	}

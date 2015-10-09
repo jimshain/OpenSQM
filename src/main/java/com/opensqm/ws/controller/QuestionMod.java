@@ -13,6 +13,12 @@ import com.opensqm.json.QuestionModRq;
 import com.opensqm.json.QuestionModRs;
 import com.opensqm.json.Status;
 
+/**
+ * Question modify handler.
+ * 
+ * @author Jim Shain
+ *
+ */
 @Controller
 public class QuestionMod {
 
@@ -24,22 +30,30 @@ public class QuestionMod {
 		QuestionModRq questionModRq = null;
 		QuestionModRs questionModRs = new QuestionModRs();
 		Status status = new Status("999", "Status not set.");
-		String json = null;
-		
+
 		try {
 			questionModRq = gson.fromJson(request, QuestionModRq.class);
+			validate(questionModRq);
 			modify(questionModRq.getQuestion());
-		} catch(StatusException se) {
+			status = new Status("0", "Success");
+		} catch (StatusException se) {
 			status = se.getStatus();
 		} catch (Exception e) {
 			status = new Status("999", e.toString());
 			e.printStackTrace();
 		}
-		
-		return json;
+		questionModRs.setStatus(status);
+		response = gson.toJson(questionModRs);
+		return response;
 	}
-	
+
+	private void validate(QuestionModRq questionModRq) throws StatusException {
+		if (questionModRq == null) {
+			throw new StatusException("105", "QuestionModRq must not be null.");
+		}
+	}
+
 	private void modify(Question question) throws StatusException {
-		
+
 	}
 } // Class end

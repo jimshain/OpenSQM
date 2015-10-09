@@ -26,7 +26,7 @@ import com.opensqm.json.ResponseHeader;
 import com.opensqm.json.Status;
 
 /**
- * Question add controller.
+ * Question add message handler.
  * 
  * @author Jim Shain
  *
@@ -73,7 +73,7 @@ public class QuestionAdd {
 			questionAddRs.setResponseHeader(new ResponseHeader());
 			questionAddRs.getResponseHeader().setRquid(
 					questionAddRq.getRequestHeader().getRquid());
-			add(questionAddRq.getQuestion());
+			questionAddRs.setQuestionId(add(questionAddRq.getQuestion()));
 			status = new Status("0", "Success");
 		} catch (StatusException se) {
 			status = se.getStatus();
@@ -88,6 +88,14 @@ public class QuestionAdd {
 		return response;
 	}
 
+	/**
+	 * Validate the question add request.
+	 * 
+	 * @param questionAddRq
+	 *            Question add request
+	 * @throws StatusException
+	 *             Throws a status exception if validation fails.
+	 */
 	private void validate(QuestionAddRq questionAddRq) throws StatusException {
 		if (questionAddRq == null) {
 			throw new StatusException("105", "QuestionAddRq must not be null.");
@@ -146,6 +154,7 @@ public class QuestionAdd {
 					pStmt.setInt(2, ++choiceIndex);
 					pStmt.setString(3, choice.getText());
 					pStmt.setBoolean(4, choice.isCorrectAnswer());
+					pStmt.execute();
 					pStmt.close();
 				}
 			}
@@ -170,4 +179,4 @@ public class QuestionAdd {
 		return rquid;
 	}
 
-}// Class end
+} // Class end
