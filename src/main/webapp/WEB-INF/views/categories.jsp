@@ -1,135 +1,129 @@
-<html>
-<head>
-<title>OpenSQM Main Menu</title>
-<link rel="stylesheet" type="text/css" href="assets/css/opensqm.css">
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<!-- Optional theme -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<script src="assets/js/categories.js"></script>
-<script>
-	$(function() {
-		$("#reports").button().on("click", function() {
-			window.location.href = "reports";
-		});
-
-		$("#categories").button().on("click", function() {
-			window.location.href = "categories";
-		});
-
-		$("#questions").button().on("click", function() {
-			window.location.href = "questions";
-		});
-		$("#exclusions").button().on("click", function() {
-			window.location.href = "exclusions";
-		});
-		$("#sample-question").button().on("click", function() {
-			window.location.href = "mainMenu";
-		});
-
-	});
-</script>
-<script>
-	function addCategory() {
-		//document.form.submit();
-		$
-				.ajax({
-					method : "POST",
-					url : "categoryAddWeb",
-					data : "{text:\"" + $('#category').val() + "\", weight:\""
-							+ $('#weight').val() + "\"}",
-					datatype : "application/json",
-					contentType : "text/plain",
-					success : function(result) {
-						var resp = JSON.parse(result);
-						alert(result);
-						//if (resp.status.code == "0") {
-						$('table#categoryTbl tr:first')
-								.after(
-										"<tr><td>"
-												+ $('#category').val()
-												+ "</td><td>"
-												+ $('#weight').val()
-												+ "</td><td><button class=\"btn btn-success btn-sm\">Change</button></td></tr>");
-						//	}
-					}
-				});
-		$('#dialog-form').modal('hide');
-	}
-</script>
-</head>
-<body>
-	<section class="flat">
-		<button name="Categories" id="categories">Categories</button>
-		<button name="Questions" id="questions">Questions</button>
-		<button name="Reports" id="reports">Reports</button>
-		<button name="Exclusions" id="exclusions">Exclusions</button>
-		<button name="SampleQuestion" id="sample-question">Sample</button>
-	</section>
-
-	<div class="panel panel-green">
-		<div class="panel-heading">
-			<h2>Categories</h2>
-			<button id="newCategory" class="btn btn-primary align-right"
-				data-toggle="modal" data-target="#dialog-form">New Category</button>
+<header>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <h1 class="navbar-brand"><span class="glyphicon glyphicon-th"></span> Categories</h1>
 		</div>
-
-		<div class="table-responsive panel-body">
-			<table id="categoryTbl"
-				class="table table-hover table-bordered table-striped">
-				<tr>
-					<th>Category</th>
-					<th>Weight</th>
-					<th></th>
-				</tr>
-			</table>
+		<div class="navbar-form navbar-right">
+	
+		  
+		  <input type="text" class="form-control" placeholder="Search for..." ng-model="searchText">
+		  
+		
+		<div class="btn-group " role="group">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_category">New Category</button>
+		</div>
+		</div>
+		</div><!-- /.navbar -->
+	</nav>
+</header>
+<main>
+	<div class="container-fluid">
+		<div class="page-content">
+			<table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>SN&nbsp;</th>
+                        <th>
+							<a href="#" ng-click="sortType = 'category'; sortReverse = !sortReverse">
+								Category&nbsp;								
+								<span ng-show="sortType == 'category' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+								<span ng-show="sortType == 'category' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+							</a>
+						</th>
+                        <th>
+							<a href="#" ng-click="sortType = 'weight'; sortReverse = !sortReverse">
+								Weight&nbsp;
+								<span ng-show="sortType == 'weight' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+								<span ng-show="sortType == 'weight' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+							</a>
+						</th>                        
+                        <th>
+							<a href="#" ng-click="sortType = 'created'; sortReverse = !sortReverse">
+								Created At&nbsp;
+								<span ng-show="sortType == 'created' && !sortReverse" class="glyphicon glyphicon-triangle-bottom"></span>
+								<span ng-show="sortType == 'created' && sortReverse" class="glyphicon glyphicon-triangle-top"></span>
+							</a>
+						</th>
+						<th>Action &nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in categories | filter:searchText | orderBy:sortType:sortReverse">
+                        <td>{{$index + 1}}</td>
+                        <td>{{item.category}}</td>
+                        <td>{{item.weight}}</td>
+                        <td>{{item.created | date :"dd MMM y | hh:mm a"}}</td>
+						<td>
+							<div class="btn-group-xs">
+							  <button class="btn btn-info" type="button" ng-click="edit(item)">Edit</button>
+							  <button class="btn btn-danger" type="button"  ng-click="delete($index)">Remove</button>
+							</div>
+						</td>
+                    </tr>
+					<tr ng-if="categories.length==0">
+						<td class="text-center" colspan="5"><br/><br/><br/>Loading...<br/><br/><br/></td>
+					</tr>
+                </tbody>
+            </table>
 		</div>
 	</div>
-	<div id="dialog-form" title="Category" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<div class="page col-sm-6">
-						<h2>Catagories</h2>
-					</div>
-					<div class="col-sm-6" style="text-align:right;">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-				</div>
-
-				<form>
-					<div class="modal-body">
-						<table class="table table-hover table-bordered table-striped">
-							<tr>
-								<td><label class="control-label">Category</label></td>
-								<td><input type="text" class="form-control"
-									placeholder="Category" id="category"></td>
-							</tr>
-							<tr>
-								<td><label class="control-label">Weight</label></td>
-								<td><input type="text" class="form-control"
-									placeholder="Weight" id="weight"></td>
-							</tr>
-						</table>
-					</div>
-					<div class="modal-footer">
-						<div class="col-xs-6 text-center">
-							<input type="button" class="btn btn-info btn-lg" value="Add"
-								onclick="return addCategory();" />
-						</div>
-						<div class="col-xs-6 text-center">
-							<input type="button" class="btn btn-warning btn-lg"
-								value="cancel" data-dismiss="modal" />
-						</div>
-					</div>
-				</form>
+	<div id="add_category" class="modal fade">
+	  <div class="modal-dialog">
+	  <form name="From" novalidate>
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title">Add New Category</h4>
+		  </div>
+		  <div class="modal-body">
+			<div class="form-group">
+				<label for="item_name">Category Name</label>
+				<input type="text" class="form-control" id="item_name" placeholder="Item Name" ng-model="item.category" required>
 			</div>
-		</div>
-</body>
-
-</html>
+			  
+			<div class="form-group">
+				<label for="weight">Weight</label>
+				<input type="text" class="form-control" id="weight" placeholder="Weight" ng-model="item.weight" required>
+			</div>
+			  		 
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			<button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
+		  </div>
+		</div><!-- /.modal-content -->
+		</form>
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div id="edit_category" class="modal fade">
+	  <div class="modal-dialog">
+	  <form name="From" novalidate>
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title">Edit Category</h4>
+		  </div>
+		  <div class="modal-body">
+			<div class="form-group">
+				<label for="item_name">Category Name</label>
+				<input type="text" class="form-control" id="item_name" placeholder="Item Name" ng-model="item.category" required>
+			</div>
+			  
+			<div class="form-group">
+				<label for="weight">Weight</label>
+				<input type="text" class="form-control" id="weight" placeholder="Weight" ng-model="item.weight" required>
+			</div>
+			  		 
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			<button type="submit" class="btn btn-primary" ng-click="update()">Save Changes</button>
+		  </div>
+		</div><!-- /.modal-content -->
+		</form>
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</main>
+					

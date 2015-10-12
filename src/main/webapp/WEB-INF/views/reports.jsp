@@ -1,81 +1,100 @@
-<html>
-<head>
-<TITLE>OpenSQM Main Menu</TITLE>
-<link rel="stylesheet" type="text/css" href="assets/css/opensqm.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<script>
-	$(function() {
-		$("#reports").button().on("click", function() {
-			window.location.href = "reports";
-		});
-
-		$("#categories").button().on("click", function() {
-			window.location.href = "categories";
-		});
-		
-		$("#questions").button().on("click", function() {
-			window.location.href = "questions";
-		});
-		$("#exclusions").button().on("click", function() {
-			window.location.href = "exclusions";
-		});
-		$("#sample-question").button().on("click", function() {
-			window.location.href = "mainMenu";
-		});
-
-	});
-</script>
-</head>
-
-<body>
-	<section class="flat">
-		<button name="Categories" id="categories">Categories</button>
-		<button name="Questions">Questions</button>
-		<button name="Reports" id="reports">Reports</button>
-		<button name="Exclusions" id="exclusions">Exclusions</button>
-		<button name="SampleQuestion" id="sample-question">Sample</button>
-	</section>
+<header>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <h1 class="navbar-brand"><span class="glyphicon glyphicon-file"></span> Reports</h1>
+		</div>
+		<div class="navbar-form navbar-right">
 	
-<div>
-<div class="panel panel-green col-xs-6">
-	<div class="panel-heading">
-		<div class="page col-sm-6"><h2>Questions</h2></div>
-	</div>
-	<div class="panel-body">
-		<table class="table table-hover table-bordered table-striped">
-			<tr><td><label class="control-label">Start Date</label></td><td><input type="text" class="form-control" name="startDate" placeholder="Start Date"></td></tr>
-			<tr><td><label class="control-label">End Date</label></td><td><input type="text" class="form-control" name="endDate" placeholder="End Date"></td></tr>
-			<tr><td><label class="control-label">Store Number</label></td><td><input type="text" class="form-control" name="storeNumber" placeholder="Store Number"></td></tr>
-			<tr><td><label class="control-label">Category</label></td><td><input type="text" class="form-control" name="category" placeholder="Category"></td></tr>
-		</table>
-	</div>
-	<div class="panel-footer">
-		<div class="col-sm-6" style="text-align:right;"><input type="button" class="btn btn-info btn-lg" value="Add Question"/></div>
-	</div>
-</div>
-<div class="panel panel-green col-xs-6">
-	<div class="panel-heading">
-		<div class="page col-sm-6"><h2>Run Report</h2></div>
+		  
+		  <input type="text" class="form-control" placeholder="Search for..." ng-model="searchText">
+		  
 		
+		<div class="btn-group " role="group">
+			<button type="button" class="btn btn-primary">Create</button>
+		</div>
+		</div>
+		</div><!-- /.navbar -->
+	</nav>
+</header>
+<main>
+	<div class="container-fluid">
+		<div class="page-content">
+			<div class="row">
+				<div class="col-sm-5">
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+						<h3 class="panel-title">Questions</h3>
+					  </div>
+					  <div class="panel-body">
+						<form class="form-horizontal">
+						  <div class="form-group">
+							<label for="start_date" class="col-sm-4 control-label">Start Date</label>
+							<div class="col-sm-8">
+							  <input type="date" class="form-control" id="start_date" placeholder="Start Date">
+							</div>
+						  </div>
+						  <div class="form-group">
+							<label for="end_date" class="col-sm-4 control-label">End Date</label>
+							<div class="col-sm-8">
+							  <input type="date" class="form-control" id="end_date" placeholder="End Date">
+							</div>
+						  </div>
+						  <div class="form-group">
+							<label for="store_number" class="col-sm-4 control-label">Store Number</label>
+							<div class="col-sm-8">
+							  <input type="number" class="form-control" id="store_number" placeholder="Store Number">
+							</div>
+						  </div>
+						  <div class="form-group">
+							<label for="category" class="col-sm-4 control-label">Category</label>
+							<div class="col-sm-8">
+							  <input type="text" class="form-control" id="category" placeholder="Category">
+							</div>
+						  </div>
+						  <div class="form-group">
+							<div class="col-sm-offset-4 col-sm-8">
+							  <button type="submit" class="btn btn-success">Run Report</button>
+							</div>
+						  </div>
+						</form>
+					  </div>
+					</div>
+				</div>
+				<div class="col-sm-7">
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+						<h3 class="panel-title">Report Result</h3>
+					  </div>
+					  <div class="panel-body no-padding">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>SN&nbsp;</th>
+										<th>Store&nbsp;</th>
+										<th>Taken&nbsp;</th>
+										<th>Passed &nbsp;</th>
+										<th>Percent&nbsp;</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="item in reports | filter:searchText">
+										<td>{{$index + 1}}</td>
+										<td>{{item.store}}</td>									
+										<td>{{item.taken}}</td>
+										<td>{{item.passed}}</td>
+										<td>{{item.percent}}</td>
+									</tr>
+									<tr ng-if="reports.length==0">
+										<td class="text-center" colspan="5"><br/><br/><br/>Loading...<br/><br/><br/></td>
+									</tr>
+								</tbody>
+							</table>
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="panel-body">
-		<table class="table table-hover table-bordered table-striped">
-			<tr><th>Store</th><th>Taken</th><th>Passed</th><th>Percent</th></tr>
-			<tr><td>100</td><td>47</td><td>23</td><td>49</td></tr>
-			<tr><td>110</td><td>101</td><td>5</td><td>5</td></tr>
-			<tr><td>240</td><td>30</td><td>27</td><td>90</td></tr>
-			<tr><td>594</td><td>204</td><td>143</td><td>70</td></tr>
-		</table>
-	</div>
-</div>
-</div>
-
-</body>
-
-</html>
+</main>
+					

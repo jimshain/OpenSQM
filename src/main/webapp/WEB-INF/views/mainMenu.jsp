@@ -1,78 +1,46 @@
-<HTML>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+    <title>OpenSQM</title>
+    <!-- Bootstrap core CSS -->
+	<link href="<c:url value="/assets/css/bootstrap.min.css" context="/OpenSQM-1.0/v1.0" />" rel="stylesheet" />
+    <!--<link href="/assets/css/bootstrap.min.css" rel="stylesheet">-->
+    <!-- Custom styles for this template -->
+    <!--<link href="css/app.css" rel="stylesheet">-->
+	<link href="<c:url value="/assets/css/app.css" context="/OpenSQM-1.0/v1.0" />" rel="stylesheet" />
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
 
-<head>
-<title>OpenSQM Main Menu</title>
-<link rel="stylesheet" type="text/css" href="assets/css/opensqm.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
-<script>
-	$(function() {
-		$("#reports").button().on("click", function() {
-			window.location.href = "reports";
-		});
-
-		$("#categories").button().on("click", function() {
-			window.location.href = "categories";
-		});
-		
-		$("#questions").button().on("click", function() {
-			window.location.href = "questions";
-		});
-		$("#exclusions").button().on("click", function() {
-			window.location.href = "exclusions";
-		});
-
-	});
-	/*$( document ).ready(function() {
-		$('#dialog-form').modal('show');
-	});*/
-</script>
-</head>
-<body>
-
-	<div id="dialog-form" title="Sample Question" class="modal fade" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="panel panel-green">
-						<div class="panel-heading">
-							<div class="page"><h2>Why did the chicken cross the road?</h2></div>
-						</div>
-						<div class="panel-body">
-							<input type="radio" name="testAnswer" class="testAnswer" value="1">To get to the other side.
-							</br> 
-							<input type="radio" name="testAnswer"class="testAnswer" value="2">Colonel Sanders wasn't far behind.
-							<br> 
-							<input type="radio" name="testAnswer" class="testAnswer" value="3">It never made it. Nuggets for all!
-							<br>
-						</div>
-						<div class="panel-footer" style="overflow:hidden;">
-							<div class="col-xs-6 text-center">
-								<input type="button" class="btn btn-info btn-lg" value="Submit"/>
-							</div>
-							<div class="col-xs-6 text-center">
-								<input type="button" class="btn btn-warning btn-lg" value="Close" data-dismiss="modal"/>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
+  <body>
+	<div class="wrapper">
+		<section id="nav">
+			<header><h2>OpenSQM</h2></header>
+			<ul class="nav nav-stacked">
+				<!--<li active-link="active"><a href="#/dashboard"><span class="glyphicon glyphicon-dashboard"></span> &nbsp; Dashboard</a></li>-->
+				<li active-link="active"><a href="#/categories"><span class="glyphicon glyphicon-th"></span> &nbsp; Categories</a></li>
+				<li active-link="active"><a href="#/questions"><span class="glyphicon glyphicon-question-sign"></span> &nbsp; Questions</a></li>
+				<li active-link="active"><a href="#/reports"><span class="glyphicon glyphicon-file"></span> &nbsp; Reports</a></li>
+				<li active-link="active"><a href="#/exclusions"><span class="glyphicon glyphicon-calendar"></span> &nbsp; Exclusions</a></li>
+			</ul>
+		</section>
+		<section id="body">
+			<div id="content" ui-view></div>
+		</section>		
 	</div>
-
-	<section class="flat">
-		<button name="Categories" id="categories">Categories</button>
-		<button name="Questions" id="questions">Questions</button>
-		<button name="Reports" id="reports">Reports</button>
-		<button name="Exclusions" id="exclusions">Exclusions</button>
-		<button name="SampleQuestion" id="sample-question" data-toggle="modal" data-target="#dialog-form">Sample</button>
-	</section>
-
-</BODY>
-</HTML>
+	<jsp:include page="includes/scripts.jsp" />
+  </body>
+</html>
