@@ -25,6 +25,8 @@ angular.module('myApp.controllers', [])
 		  //console.log(data);
 		  if(data.status.code === "800"){
 			 alert("Error Description: "+data.status.description + "\nStatus Code: " +data.status.code); 
+		  }else{
+			$scope.categories = data.categories;
 		  }
 		  
 		}).
@@ -43,16 +45,24 @@ angular.module('myApp.controllers', [])
 		}
 	$scope.item = {};
 	$scope.save = function(){
-		$scope.saved_items = $localstorage.getObject("CAT_ITEMS");   
-		if($scope.saved_items.length !== undefined){
-			$scope.categories = $scope.saved_items;
-		}
 		if($scope.From.$valid){
-			//alert(JSON.stringify($scope.item));
-			$scope.item.created = Date.now();
-			$scope.categories.push($scope.item);
-			$localstorage.setObject("CAT_ITEMS", $scope.categories);
-			$scope.categories = $localstorage.getObject("CAT_ITEMS");
+			$http({
+				method: 'POST',
+				url:'categoryAddWeb',
+				data : $scope.item
+			}).
+			success(function (data) {
+			  if(data.status.code === "0"){
+				  $scope.getCategories();
+				  alert("Category Added!!");
+			  }else if(data.status.code === "800") {			  
+				 alert("Error Description: "+data.status.description + "\nStatus Code: " +data.status.code); 
+			  }
+			  
+			}).
+			error(function (error) {
+				alert(JSON.stringify(error));
+			});
 			$scope.item = {};
 			
 			$('#add_category').modal('hide');
@@ -118,6 +128,11 @@ angular.module('myApp.controllers', [])
 		}else{
 			alert("Invalid Entry!!!");
 		}	
+	};
+	$scope.edit = function(item){
+		$scope.item = item;
+		$('#edit_question').modal('show');
+		
 	};
 		
 			

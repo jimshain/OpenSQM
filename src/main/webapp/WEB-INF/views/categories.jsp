@@ -51,13 +51,13 @@
                 <tbody>
                     <tr ng-repeat="item in categories | filter:searchText | orderBy:sortType:sortReverse">
                         <td>{{$index + 1}}</td>
-                        <td>{{item.category}}</td>
+                        <td>{{item.text}}</td>
                         <td>{{item.weight}}</td>
                         <td>{{item.created | date :"dd MMM y | hh:mm a"}}</td>
 						<td>
 							<div class="btn-group-xs">
 							  <button class="btn btn-info" type="button" ng-click="edit(item)">Edit</button>
-							  <button class="btn btn-danger" type="button"  ng-click="delete($index)">Remove</button>
+							  <button class="btn btn-danger" type="button"  ng-click="delete(item.id)">Remove</button>
 							</div>
 						</td>
                     </tr>
@@ -79,12 +79,12 @@
 		  <div class="modal-body">
 			<div class="form-group">
 				<label for="item_name">Category Name</label>
-				<input type="text" class="form-control" id="item_name" placeholder="Item Name" ng-model="item.category" required>
+				<input type="text" class="form-control" id="item_name" placeholder="Item Name" ng-model="item.text" required>
 			</div>
 			  
 			<div class="form-group">
 				<label for="weight">Weight</label>
-				<input type="text" class="form-control" id="weight" placeholder="Weight" ng-model="item.weight" required>
+				<input type="number" class="form-control" id="weight" placeholder="Weight" ng-model="item.weight" required>
 			</div>
 			  		 
 		  </div>
@@ -108,12 +108,12 @@
 		  <div class="modal-body">
 			<div class="form-group">
 				<label for="item_name">Category Name</label>
-				<input type="text" class="form-control" id="item_name" placeholder="Item Name" ng-model="item.category" required>
+				<input type="text" class="form-control" id="item_name" placeholder="Item Name" ng-model="item.text" required>
 			</div>
 			  
 			<div class="form-group">
 				<label for="weight">Weight</label>
-				<input type="text" class="form-control" id="weight" placeholder="Weight" ng-model="item.weight" required>
+				<input type="number" class="form-control" id="weight" placeholder="Weight" ng-model="item.weight" required>
 			</div>
 			  		 
 		  </div>
