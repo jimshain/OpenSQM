@@ -119,6 +119,11 @@ angular.module('myApp.controllers', [])
 			alert("Invalid Entry!!!");
 		}	
 	};
+	$scope.edit = function(item){
+		$scope.item = item;
+		$('#edit_question').modal('show');
+		
+	};
 		
 			
 })
