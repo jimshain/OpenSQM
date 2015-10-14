@@ -109,3 +109,6 @@ a{
 .modal-backdrop{
 	z-index:-1;
 }
+.form-group .input-group {
+    margin-bottom: 15px;
+}

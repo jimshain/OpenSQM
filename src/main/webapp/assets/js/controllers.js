@@ -5,12 +5,12 @@ angular.module('myApp.controllers', [])
 .controller('CategoriesCtrl', function($scope, $localstorage, $filter, $http) {
 	$scope.categories = [
 		{
-			category:"Money Transfer",
+			text:"Money Transfer",
 			weight:"10",
 			created:new Date()
 		},
 		{
-			category:"Check Cashing",
+			text:"Check Cashing",
 			weight:"20",
 			created:new Date()
 		}
@@ -20,17 +20,16 @@ angular.module('myApp.controllers', [])
 			method: 'POST',
 			url:'categoryInqWeb',
 			data : "{}"
-		}).
-		success(function (data) {
-		  //console.log(data);
+		})
+		.success(function (data) {
 		  if(data.status.code === "800"){
 			 alert("Error Description: "+data.status.description + "\nStatus Code: " +data.status.code); 
 		  }else{
 			$scope.categories = data.categories;
 		  }
 		  
-		}).
-		error(function (error) {
+		})
+		.error(function (error) {
 			alert(JSON.stringify(error));
 		});
 	};
@@ -38,11 +37,11 @@ angular.module('myApp.controllers', [])
 	$scope.sortType     = 'category'; // set the default sort type
 	$scope.sortReverse  = false;  // set the default sort order
 	
-	$scope.saved_items = $localstorage.getObject("CAT_ITEMS");   
+	//$scope.saved_items = $localstorage.getObject("CAT_ITEMS");   
 	
-		if($scope.saved_items.length !== undefined){
-			$scope.categories = $scope.saved_items;
-		}
+		//if($scope.saved_items.length !== undefined){
+			//$scope.categories = $scope.saved_items;
+		//}
 	$scope.item = {};
 	$scope.save = function(){
 		if($scope.From.$valid){
@@ -91,14 +90,16 @@ angular.module('myApp.controllers', [])
 	
 	$scope.questions = [
 		{
-			question:"Why did the chicken cross the road?",
-			category:"Money Transfer",
+			text:"Why did the chicken cross the road?",
+			categoryId:"Money Transfer",
+			choices:[],
 			active:"Y",
 			created:new Date()
 		},
 		{
-			question:"How much would could a wookchuck chuck?",
-			category:"Check Cashing",
+			text:"How much would could a wookchuck chuck?",
+			categoryId:"Check Cashing",
+			choices:[],
 			active:"Y",
 			created:new Date()
 		}

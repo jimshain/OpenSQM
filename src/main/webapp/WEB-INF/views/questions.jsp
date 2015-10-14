@@ -35,7 +35,7 @@
                 <tbody>
                     <tr ng-repeat="item in questions | filter:searchText | orderBy:'-created'">
                         <td>{{$index + 1}}</td>
-                        <td>{{item.question}}</td>
+                        <td>{{item.text}}</td>
 						<td>{{item.category}}</td>
 						<td>{{item.choices}}</td>
 						<td>{{item.active}}</td>
@@ -45,8 +45,7 @@
 							  <button class="btn btn-info" type="button" ng-click="edit(item)">Edit</button>
 							  <!--<button class="btn btn-danger" type="button"  ng-click="delete($index)">Remove</button>-->
 							</div>
-						</td>
-                        
+						</td>   
                     </tr>
 					<tr ng-if="questions.length==0">
 						<td class="text-center" colspan="7"><br/><br/><br/>Loading...<br/><br/><br/></td>
@@ -67,27 +66,59 @@
 		  <div class="modal-body">
 			<div class="form-group">
 				<label for="item_name">Question</label>
-				<input type="text" class="form-control" id="item_name" placeholder="Enter Question" ng-model="item.question" required>
+				<textarea class="form-control" id="item_name" placeholder="Enter Question" ng-model="item.question" required></textarea>
 			</div>
 			<div class="form-group">
-				<label for="choices">Choices</label>
-				<textarea class="form-control" id="choices" placeholder="Enter Choices" ng-model="item.choices" required></textarea>
+				<label for="choices">Choices <span class="help-block small">(Select checkboxes to indicate correct awnsers.)</span></label>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice1" placeholder="Choice 1">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice2" placeholder="Choice 2">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice3" placeholder="Choice 3">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice4" placeholder="Choice 4">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+				</div>
 			</div>
-			  
-			<div class="form-group">
-				<label for="category">Select Category </label>
-				<select class="form-control" id="category" placeholder="Select Category" ng-model="item.category" required>
-					<option value="">Select Category</option>
-					<option ng-repeat="option in categories" value="{{option.category}}">{{option.category}}</option>
-				</select>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="category">Select Category </label>
+						<select class="form-control" id="category" placeholder="Select Category" ng-model="item.category" required>
+							<option value="">Select Category</option>
+							<option ng-repeat="option in categories" value="{{option.category}}">{{option.category}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="active">Active Flag</label>
+						<select class="form-control" id="active" ng-model="item.active" required>
+							<option value="Y">Y</option>
+							<option value="N">N</option>
+						</select>
+					</div>
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="active">Active Flag</label>
-				<select class="form-control" id="active" ng-model="item.active" required>
-					<option value="Y">Y</option>
-					<option value="N">N</option>
-				</select>
-			</div>
+				
 			  		 
 		  </div>
 		  <div class="modal-footer">
@@ -110,27 +141,59 @@
 		  <div class="modal-body">
 			<div class="form-group">
 				<label for="item_name">Question</label>
-				<input type="text" class="form-control" id="item_name" placeholder="Enter Question" ng-model="item.question" required>
+				<textarea class="form-control" id="item_name" placeholder="Enter Question" ng-model="item.question" required></textarea>
 			</div>
 			<div class="form-group">
-				<label for="choices">Choices</label>
-				<textarea class="form-control" id="choices" placeholder="Enter Choices" ng-model="item.choices" required></textarea>
+				<label for="choices">Choices <span class="help-block small">(Select checkboxes to indicate correct awnsers.)</span></label>
+				
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice1" placeholder="Choice 1">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice2" placeholder="Choice 2">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice3" placeholder="Choice 3">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="input-group">
+						  <input type="text" class="form-control" id="choice4" placeholder="Choice 4">
+						  <div class="input-group-addon"><input type="checkbox"></div>
+						</div>
+					</div>
+				</div>
 			</div>
-			  
-			<div class="form-group">
-				<label for="category">Select Category </label>
-				<select class="form-control" id="category" placeholder="Select Category" ng-model="item.category" required>
-					<option value="">Select Category</option>
-					<option ng-repeat="option in categories" value="{{option.category}}">{{option.category}}</option>
-				</select>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="category">Select Category </label>
+						<select class="form-control" id="category" placeholder="Select Category" ng-model="item.category" required>
+							<option value="">Select Category</option>
+							<option ng-repeat="option in categories" value="{{option.category}}">{{option.category}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="active">Active Flag</label>
+						<select class="form-control" id="active" ng-model="item.active" required>
+							<option value="Y">Y</option>
+							<option value="N">N</option>
+						</select>
+					</div>
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="active">Active Flag</label>
-				<select class="form-control" id="active" ng-model="item.active" required>
-					<option value="Y">Y</option>
-					<option value="N">N</option>
-				</select>
-			</div>
+				
 			  		 
 		  </div>
 		  <div class="modal-footer">
