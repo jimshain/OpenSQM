@@ -18,6 +18,8 @@ import com.opensqm.json.RequestHeader;
 
 public class CategoryDelTest {
 
+	private String categoryId;
+	
 	public static void main(String[] args) {
 
 	}
@@ -33,9 +35,8 @@ public class CategoryDelTest {
 		RequestHeader requestHeader = new RequestHeader();
 		CategoryDelRq categoryDelRq = new CategoryDelRq();
 		Category category = new Category();
-		String categoryId = null;
 		try {
-			categoryId = setUp();
+			setUp();
 			requestHeader.setRquid(UUID.randomUUID().toString());
 			requestHeader.setUserId("56");
 			category.setText("Why did the chicken cross the road?");
@@ -57,7 +58,7 @@ public class CategoryDelTest {
 		}
 	}
 
-	private String setUp() {
+	private void setUp() {
 		Gson gson = new Gson();
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(
@@ -69,7 +70,6 @@ public class CategoryDelTest {
 		CategoryAddRq categoryAddRq = new CategoryAddRq();
 		CategoryAddRs categoryAddRs = null;
 		Category category = new Category();
-		String categoryId = null;
 		try {
 			requestHeader.setRquid(UUID.randomUUID().toString());
 			requestHeader.setUserId("56");
@@ -86,7 +86,7 @@ public class CategoryDelTest {
 				json = EntityUtils.toString(response.getEntity());
 				System.out.println("Respone = " + json);
 				categoryAddRs = gson.fromJson(json, CategoryAddRs.class);
-				categoryId = categoryAddRs.getCategoryId();
+				this.categoryId = categoryAddRs.getCategoryId();
 			} else {
 				System.out.println("HTTP Error: "
 						+ response.getStatusLine().getStatusCode());
@@ -94,6 +94,6 @@ public class CategoryDelTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return categoryId;
+		return;
 	}
 }

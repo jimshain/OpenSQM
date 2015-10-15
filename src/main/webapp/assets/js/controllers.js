@@ -4,16 +4,6 @@ angular.module('myApp.controllers', [])
 })
 .controller('CategoriesCtrl', function($scope, $localstorage, $filter, $http) {
 	$scope.categories = [
-		{
-			text:"Money Transfer",
-			weight:"10",
-			created:new Date()
-		},
-		{
-			text:"Check Cashing",
-			weight:"20",
-			created:new Date()
-		}
 	];
 	$scope.getCategories = function(){
 		$http({
@@ -37,11 +27,11 @@ angular.module('myApp.controllers', [])
 	$scope.sortType     = 'category'; // set the default sort type
 	$scope.sortReverse  = false;  // set the default sort order
 	
-	//$scope.saved_items = $localstorage.getObject("CAT_ITEMS");   
+	// $scope.saved_items = $localstorage.getObject("CAT_ITEMS");
 	
-		//if($scope.saved_items.length !== undefined){
-			//$scope.categories = $scope.saved_items;
-		//}
+		// if($scope.saved_items.length !== undefined){
+			// $scope.categories = $scope.saved_items;
+		// }
 	$scope.item = {};
 	$scope.save = function(){
 		if($scope.From.$valid){
@@ -53,8 +43,7 @@ angular.module('myApp.controllers', [])
 			success(function (data) {
 			  if(data.status.code === "0"){
 				  $scope.getCategories();
-				  alert("Category Added!!");
-			  }else if(data.status.code === "800") {			  
+			  }else {			  
 				 alert("Error Description: "+data.status.description + "\nStatus Code: " +data.status.code); 
 			  }
 			  
@@ -73,13 +62,31 @@ angular.module('myApp.controllers', [])
 	$scope.delete = function(index){
 		var r = confirm("Are you sure, you want to remove this category ?");
 		if (r == true) {
-			$scope.categories.splice(index, 1)
-			$localstorage.setObject("CAT_ITEMS", $scope.categories);
-			$scope.categories = $localstorage.getObject("CAT_ITEMS");
-			alert("Category removed successfull!!!");
+			$http({
+				method: 'POST',
+				url:'categoryDelWeb',
+				data : $scope.item
+			}).
+			success(function (data) {
+			  if(data.status.code === "0"){
+				  $scope.getCategories();
+					$scope.item = {};
+					$scope.categories.splice(index, 1)
+					$localstorage.setObject("CAT_ITEMS", $scope.categories);
+					$scope.categories = $localstorage.getObject("CAT_ITEMS");
+					alert("Category removed successfull!!!");
+			  }else {			  
+				 alert("Error Description: "+data.status.description + "\nStatus Code: " +data.status.code); 
+			  }
+			  
+			}).
+			error(function (error) {
+				alert(JSON.stringify(error));
+			});
 		} 
 	};
 	$scope.edit = function(item){
+		alert("id: " + item.id);
 		$scope.item = item;
 		$('#edit_category').modal('show');
 		

@@ -13,11 +13,14 @@ import com.google.gson.Gson;
 import com.opensqm.json.Category;
 import com.opensqm.json.CategoryAddRq;
 import com.opensqm.json.CategoryAddRs;
+import com.opensqm.json.CategoryDelRq;
 import com.opensqm.json.CategoryModRq;
 import com.opensqm.json.RequestHeader;
 
 public class CategoryModTest {
 
+	private String categoryId;
+	
 	public static void main(String[] args) {
 
 	}
@@ -33,15 +36,14 @@ public class CategoryModTest {
 		RequestHeader requestHeader = new RequestHeader();
 		CategoryModRq categoryModRq = new CategoryModRq();
 		Category category = new Category();
-		String categoryId = null;
 		try {
-			categoryId = setUp();
+			setUp();
 			requestHeader.setRquid(UUID.randomUUID().toString());
 			requestHeader.setUserId("56");
 			category.setText("Why did the chicken cross the road?");
 			categoryModRq.setRequestHeader(requestHeader);
 			categoryModRq.setCategory(category);
-			category.setId(categoryId);
+			category.setId(this.categoryId);
 			category.setText("Elementalist");
 			category.setWeight(80);
 			request = gson.toJson(categoryModRq);
@@ -51,6 +53,7 @@ public class CategoryModTest {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				json = EntityUtils.toString(response.getEntity());
 				System.out.println("Respone = " + json);
+				cleanup();
 			} else {
 				System.out.println("HTTP Error: "
 						+ response.getStatusLine().getStatusCode());
@@ -60,7 +63,7 @@ public class CategoryModTest {
 		}
 	}
 
-	private String setUp() {
+	private void setUp() {
 		Gson gson = new Gson();
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(
@@ -72,7 +75,6 @@ public class CategoryModTest {
 		CategoryAddRq categoryAddRq = new CategoryAddRq();
 		CategoryAddRs categoryAddRs = null;
 		Category category = new Category();
-		String categoryId = null;
 		try {
 			requestHeader.setRquid(UUID.randomUUID().toString());
 			requestHeader.setUserId("56");
@@ -89,7 +91,7 @@ public class CategoryModTest {
 				json = EntityUtils.toString(response.getEntity());
 				System.out.println("Respone = " + json);
 				categoryAddRs = gson.fromJson(json, CategoryAddRs.class);
-				categoryId = categoryAddRs.getCategoryId();
+				this.categoryId = categoryAddRs.getCategoryId();
 			} else {
 				System.out.println("HTTP Error: "
 						+ response.getStatusLine().getStatusCode());
@@ -97,6 +99,29 @@ public class CategoryModTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return categoryId;
+		return;
 	}
-}
+	
+	public void cleanup() {
+		Gson gson = new Gson();
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost(
+				"http://localhost:8080/OpenSQM-1.0/v1.0/categoryDel");
+		RequestHeader requestHeader = new RequestHeader();
+		CategoryDelRq categoryDelRq = new CategoryDelRq();
+		Category category = new Category();
+		String request = null;
+		try {
+			requestHeader.setRquid(UUID.randomUUID().toString());
+			requestHeader.setUserId("56");
+			category.setText("Why did the chicken cross the road?");
+			categoryDelRq.setRequestHeader(requestHeader);
+			categoryDelRq.setCategoryId(categoryId);
+			request = gson.toJson(categoryDelRq);
+			httpPost.setEntity(new StringEntity(request));
+			httpclient.execute(httpPost);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+} // Class end

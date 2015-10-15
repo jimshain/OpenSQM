@@ -61,7 +61,7 @@ public class CategoriesWebController {
 	 * Category delete web service URL.
 	 */
 	// TODO: This is hard coded for now. Should come from a property file.
-	private final static String CATEGORY_DEL_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryMod";
+	private final static String CATEGORY_DEL_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/categoryDel";
 	
 	/**
 	 * Processes the web page get.
@@ -159,6 +159,7 @@ public class CategoriesWebController {
 			categoryModRq.getRequestHeader().setRquid(
 					UUID.randomUUID().toString());
 			categoryModRq.setCategory(new Category());
+			categoryModRq.getCategory().setId(categoryModForm.getId());
 			categoryModRq.getCategory().setText(categoryModForm.getText());
 			categoryModRq.getCategory().setWeight(
 					Integer.parseInt(categoryModForm.getWeight()));
@@ -182,6 +183,7 @@ public class CategoriesWebController {
 	 */
 	@RequestMapping(value = "categoryDelWeb", method = RequestMethod.POST)
 	public @ResponseBody String categoryDel(@RequestBody String request) {
+		System.out.println("categoryDel: Started.");
 		String json = null;
 		CategoryDelRq categoryDelRq = new CategoryDelRq();
 		CategoryDelRs categoryDelRs = null;
@@ -202,6 +204,8 @@ public class CategoriesWebController {
 			categoryDelRs.setStatus(new Status("999", e.toString()));
 			json = gson.toJson(categoryDelRs);
 		}
+		
+		System.out.println("categoryDel: Ended.");
 		return json;
 	}
 

@@ -9,6 +9,11 @@ package com.opensqm.web.json;
 public class CategoryModForm {
 
 	/**
+	 * ID
+	 */
+	private String id;
+
+	/**
 	 * Text
 	 */
 	private String text;
@@ -22,6 +27,25 @@ public class CategoryModForm {
 	 * Default constructor
 	 */
 	public CategoryModForm() {
+	}
+
+	/**
+	 * Gets the ID.
+	 * 
+	 * @return ID
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * Sets the ID.
+	 * 
+	 * @param id
+	 *            ID
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**

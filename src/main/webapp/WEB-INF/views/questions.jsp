@@ -44,6 +44,8 @@
 							<div class="btn-group-xs">
 							  <button class="btn btn-info" type="button" ng-click="edit(item)">Edit</button>
 							  <!--<button class="btn btn-danger" type="button"  ng-click="delete($index)">Remove</button>-->
+							  <button class="btn btn-info" type="button" ng-click="view(item)">View</button>
+							  <button class="btn btn-info" type="button" ng-click="sample(item)">Sample</button>
 							</div>
 						</td>   
                     </tr>
