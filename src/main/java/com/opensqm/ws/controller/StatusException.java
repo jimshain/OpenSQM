@@ -2,6 +2,12 @@ package com.opensqm.ws.controller;
 
 import com.opensqm.json.Status;
 
+/**
+ * Status exception
+ * 
+ * @author Jim Shain
+ *
+ */
 public class StatusException extends Exception {
 
 	/**
@@ -14,6 +20,14 @@ public class StatusException extends Exception {
 	 */
 	private Status status;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param code
+	 *            Status code
+	 * @param description
+	 *            Status description
+	 */
 	public StatusException(String code, String description) {
 		status = new Status();
 		status.setCode(code);
