@@ -11,7 +11,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -53,12 +52,11 @@ public class QuestionAdd {
 	 * Question add.
 	 * 
 	 * @param request
-	 * @param model
-	 * @return
+	 *            Question add request message.
+	 * @return Question add response message.
 	 */
 	@RequestMapping(value = "questionAdd", method = RequestMethod.POST)
-	public @ResponseBody String doQuestionAdd(@RequestBody String request,
-			ModelMap model) {
+	public @ResponseBody String doQuestionAdd(@RequestBody String request) {
 		Gson gson = new Gson();
 		QuestionAddRq questionAddRq = null;
 		QuestionAddRs questionAddRs = new QuestionAddRs();
@@ -120,6 +118,15 @@ public class QuestionAdd {
 		}
 	}
 
+	/**
+	 * Add a question to the database.
+	 * 
+	 * @param question
+	 *            Question
+	 * @return Question ID
+	 * @throws StatusException
+	 *             Throws a status exception if insert fails.
+	 */
 	private String add(Question question) throws StatusException {
 		InitialContext initialContext = null;
 		Context context = null;

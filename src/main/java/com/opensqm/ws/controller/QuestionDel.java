@@ -9,7 +9,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,13 +51,13 @@ public class QuestionDel {
 
 	/**
 	 * Deletes a question.
-	 * @param request Question delete request message
-	 * @param model
+	 * 
+	 * @param request
+	 *            Question delete request message
 	 * @return Question delete response message.
 	 */
 	@RequestMapping(value = "questionDel", method = RequestMethod.POST)
-	public @ResponseBody String doQuestionAdd(@RequestBody String request,
-			ModelMap model) {
+	public @ResponseBody String doQuestionAdd(@RequestBody String request) {
 		Gson gson = new Gson();
 		QuestionDelRq questionDelRq = null;
 		QuestionDelRs questionDelRs = new QuestionDelRs();

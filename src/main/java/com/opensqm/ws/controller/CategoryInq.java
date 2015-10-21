@@ -36,9 +36,15 @@ public class CategoryInq {
 	private static final String CATEGORY_SELECT_ALL_SQL = "select CATEGORY_ID, CATEGORY_TEXT, WEIGHT from QUIZ_CATEGORY_TB";
 	private static final String CATEGORY_SELECT_BY_ID_SQL = "select CATEGORY_ID, CATEGORY_TEXT, WEIGHT from QUIZ_CATEGORY_TB where CATEGORY_ID = ?";
 
+	/**
+	 * Category inquiry.
+	 * 
+	 * @param request
+	 *            Category inquiry request message
+	 * @return Category inquiry response message
+	 */
 	@RequestMapping(value = "categoryInq", method = RequestMethod.POST)
-	public @ResponseBody String doCategoryInq(@RequestBody String request,
-			ModelMap model) {
+	public @ResponseBody String doCategoryInq(@RequestBody String request) {
 		Gson gson = new Gson();
 		CategoryInqRq categoryInqRq = null;
 		CategoryInqRs categoryInqRs = new CategoryInqRs();

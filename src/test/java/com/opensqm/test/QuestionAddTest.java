@@ -27,9 +27,7 @@ public class QuestionAddTest {
 	public static void main(String[] args) {
 
 		QuestionAddTest questionAddTest = new QuestionAddTest();
-		questionAddTest.setup();
 		questionAddTest.testValidQuestion();
-		questionAddTest.cleanup();
 
 	}
 
@@ -83,6 +81,7 @@ public class QuestionAddTest {
 		Choice[] choices = new Choice[3];
 
 		try {
+			setup();
 			requestHeader.setRquid(UUID.randomUUID().toString());
 			requestHeader.setUserId("56");
 			question.setText("Why did the chicken cross the road?");
@@ -123,6 +122,7 @@ public class QuestionAddTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		cleanup();
 	}
 
 	public void cleanup() {

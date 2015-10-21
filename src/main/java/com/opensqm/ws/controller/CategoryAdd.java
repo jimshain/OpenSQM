@@ -11,7 +11,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +24,8 @@ import com.opensqm.json.Status;
 
 /**
  * Category add message handler.
+ * 
+ * @author Jim Shain
  *
  */
 @Controller
@@ -39,12 +40,11 @@ public class CategoryAdd {
 	 * Category add
 	 * 
 	 * @param request
-	 * @param model
-	 * @return
+	 *            Category add request message.
+	 * @return Category add response message.
 	 */
 	@RequestMapping(value = "categoryAdd", method = RequestMethod.POST)
-	public @ResponseBody String doCategoryAdd(@RequestBody String request,
-			ModelMap model) {
+	public @ResponseBody String doCategoryAdd(@RequestBody String request) {
 		Gson gson = new Gson();
 		CategoryAddRq categoryAddRq = null;
 		CategoryAddRs categoryAddRs = new CategoryAddRs();

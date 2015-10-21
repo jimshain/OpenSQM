@@ -11,7 +11,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,16 +33,22 @@ import com.opensqm.json.Status;
 @Controller
 public class QuestionInq {
 
-	private static final String SELECT_QUESTION_BY_QUESTION_ID = "select QUESTION_ID, QUESTION_TEXT, ACTIVE from QUIZ_QUESTION where QUESTION_ID = ?";
-	private static final String SELECT_ALL_QUESTIONS = "select QUESTION_ID, QUESTION_TEXT, ACTIVE from QUIZ_QUESTION";
+	private static final String SELECT_QUESTION_BY_QUESTION_ID = "select QUESTION_ID, QUESTION_TEXT, ACTIVE from QUIZ_QUESTION_TB where QUESTION_ID = ?";
+	private static final String SELECT_ALL_QUESTIONS = "select QUESTION_ID, QUESTION_TEXT, ACTIVE from QUIZ_QUESTION_TB";
 
 	private static final String SELECT_CHOICES_BY_QUESTION_ID = "select CHOICE_ID, CHOICE_TEXT, ANSWER from QUIZ_CHOICE_TB where QUESTION_ID = ?";
 	private static final String SELECT_CATEGORY_BY_QUESTION_ID = "select CATEGORY_ID from QUIZ_QUESTION_CATEGORY_TB where QUESTION_ID = ?";
-	private static final String SELECT_CATEGORY_BY_CATEGORY_ID = "select CATEGORY_TEXT from QUIZ_CATEGORY where CATEGORY_ID = ?";
+	private static final String SELECT_CATEGORY_BY_CATEGORY_ID = "select CATEGORY_TEXT from QUIZ_CATEGORY_TB where CATEGORY_ID = ?";
 
+	/**
+	 * Question inquiry.
+	 * 
+	 * @param request
+	 *            Question inquiry request message.
+	 * @return Question inquiry response message.
+	 */
 	@RequestMapping(value = "questionInq", method = RequestMethod.POST)
-	public @ResponseBody String doQuestionInq(@RequestBody String request,
-			ModelMap model) {
+	public @ResponseBody String doQuestionInq(@RequestBody String request) {
 		Gson gson = new Gson();
 		QuestionInqRq questionInqRq = null;
 		QuestionInqRs questionInqRs = new QuestionInqRs();
@@ -115,6 +120,7 @@ public class QuestionInq {
 
 			for (Question q : questionList) {
 				pStmt = conn.prepareStatement(SELECT_CHOICES_BY_QUESTION_ID);
+				pStmt.setString(1, q.getId());
 				rs = pStmt.executeQuery();
 				while (rs.next()) {
 					choice = new Choice();
@@ -128,17 +134,18 @@ public class QuestionInq {
 				q.setChoices(choices);
 				rs.close();
 				pStmt.close();
-				
+
 				pStmt = conn.prepareStatement(SELECT_CATEGORY_BY_QUESTION_ID);
+				pStmt.setString(1, q.getCategoryId());
 				rs = pStmt.executeQuery();
 				if (rs.next()) {
 					q.setCategoryId(rs.getString(1));
 				}
 				rs.close();
 				pStmt.close();
-				
+
 				pStmt = conn.prepareStatement(SELECT_CATEGORY_BY_CATEGORY_ID);
-				
+
 			}
 
 		} catch (Exception e) {

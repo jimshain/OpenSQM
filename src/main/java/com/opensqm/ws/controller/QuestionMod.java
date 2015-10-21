@@ -1,7 +1,6 @@
 package com.opensqm.ws.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,9 +21,15 @@ import com.opensqm.json.Status;
 @Controller
 public class QuestionMod {
 
+	/**
+	 * Question modify
+	 * 
+	 * @param request
+	 *            Question modify request message.
+	 * @return Question modify response message.
+	 */
 	@RequestMapping(value = "questionMod", method = RequestMethod.POST)
-	public @ResponseBody String doQuestionAdd(@RequestBody String request,
-			ModelMap model) {
+	public @ResponseBody String doQuestionAdd(@RequestBody String request) {
 		Gson gson = new Gson();
 		String response = null;
 		QuestionModRq questionModRq = null;

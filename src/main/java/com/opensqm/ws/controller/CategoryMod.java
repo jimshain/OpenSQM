@@ -23,6 +23,8 @@ import com.opensqm.json.Status;
 
 /**
  * Category modify message handler.
+ * 
+ * @author Jim Shain
  *
  */
 @Controller
@@ -37,12 +39,11 @@ public class CategoryMod {
 	 * Category modify
 	 * 
 	 * @param request
-	 * @param model
-	 * @return
+	 *            Category modify request message
+	 * @return Category modify response message
 	 */
 	@RequestMapping(value = "categoryMod", method = RequestMethod.POST)
-	public @ResponseBody String doCategoryMod(@RequestBody String request,
-			ModelMap model) {
+	public @ResponseBody String doCategoryMod(@RequestBody String request) {
 		Gson gson = new Gson();
 		CategoryModRq categoryModRq = null;
 		CategoryModRs categoryModRs = new CategoryModRs();
