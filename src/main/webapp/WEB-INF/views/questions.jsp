@@ -26,7 +26,6 @@
                         <th>SN&nbsp;</th>
                         <th>Question&nbsp;</th>
                         <th>Category&nbsp;</th>
-						<th>Choices&nbsp;</th>
                         <th>Active &nbsp;</th>
                         <th>Created At &nbsp;</th>
                         <th>Action &nbsp;</th>
@@ -37,7 +36,6 @@
                         <td>{{$index + 1}}</td>
                         <td>{{item.text}}</td>
 						<td>{{item.category}}</td>
-						<td>{{item.choices}}</td>
 						<td>{{item.active}}</td>
 	                    <td>{{item.created | date :"dd MMM y | hh:mm a"}}</td>
 						<td>

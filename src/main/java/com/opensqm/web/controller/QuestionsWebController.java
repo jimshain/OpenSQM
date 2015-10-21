@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.opensqm.json.Question;
@@ -60,8 +61,9 @@ public class QuestionsWebController {
 	}
 
 	@RequestMapping(value = "questionInqWeb", method = RequestMethod.POST)
-	public String questionInq(@RequestBody String request) {
+	public @ResponseBody String questionInq(@RequestBody String request) {
 
+		System.out.println("QuestionsWebController.questionInq: Started.");
 		Gson gson = new Gson();
 		QuestionInqForm questionInqForm = null;
 		QuestionInqRq questionInqRq = new QuestionInqRq();
@@ -80,11 +82,14 @@ public class QuestionsWebController {
 			questionInqRs.setStatus(new Status("999", e.toString()));
 			json = gson.toJson(questionInqRs);
 		}
+		
+		System.out.println("QuestionsWebController.questionInq: Done.");
+
 		return json;
 	}
 
 	@RequestMapping(value = "questionModWeb", method = RequestMethod.POST)
-	public String questionMod(@RequestBody String request) {
+	public @ResponseBody String questionMod(@RequestBody String request) {
 
 		Gson gson = new Gson();
 		QuestionModForm questionModForm = null;
@@ -113,7 +118,7 @@ public class QuestionsWebController {
 	}
 
 	@RequestMapping(value = "questionAddWeb", method = RequestMethod.POST)
-	public String questionAdd(@RequestBody String request) {
+	public @ResponseBody String questionAdd(@RequestBody String request) {
 
 		Gson gson = new Gson();
 		QuestionAddForm questionAddForm = null;
@@ -142,7 +147,7 @@ public class QuestionsWebController {
 	}
 
 	@RequestMapping(value = "questionDelWeb", method = RequestMethod.POST)
-	public String questionDel(@RequestBody String request) {
+	public @ResponseBody String questionDel(@RequestBody String request) {
 
 		Gson gson = new Gson();
 		QuestionDelForm questionDelForm = null;

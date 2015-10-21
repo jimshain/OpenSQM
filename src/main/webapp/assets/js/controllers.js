@@ -93,24 +93,29 @@ angular.module('myApp.controllers', [])
 	};
 			
 })
-.controller('QuestionsCtrl', function($scope, $localstorage) {
+.controller('QuestionsCtrl', function($scope, $localstorage, $http) {
 	
 	$scope.questions = [
-		{
-			text:"Why did the chicken cross the road?",
-			categoryId:"Money Transfer",
-			choices:[],
-			active:"Y",
-			created:new Date()
-		},
-		{
-			text:"How much would could a wookchuck chuck?",
-			categoryId:"Check Cashing",
-			choices:[],
-			active:"Y",
-			created:new Date()
-		}
-	]; 
+	];
+	$scope.getQuestions = function(){
+		$http({
+			method: 'POST',
+			url:'questionInqWeb',
+			data : "{}"
+		})
+		.success(function (data) {
+		  if(data.status.code === "800"){
+			 alert("Error Description: "+data.status.description + "\nStatus Code: " +data.status.code); 
+		  }else{
+			$scope.questions = data.questions;
+		  }
+		  
+		})
+		.error(function (error) {
+			alert(JSON.stringify(error));
+		});
+	};
+	$scope.getQuestions();
 	$scope.categories = $localstorage.getObject("CAT_ITEMS");	
 	$scope.saved_items = $localstorage.getObject("QUESTIONS");   
 	
