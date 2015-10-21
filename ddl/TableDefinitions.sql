@@ -43,3 +43,13 @@ create table QUIZ_RESPONSE_ANSWER_TB (
   RESPONSE_ID varchar(36) not null,
   CHOICE_ID decimal(2) not null
 );
+
+drop table if exists QUIZ_EXCLUSION_TB;
+create table QUIZ_EXCLUSION_TB (
+  EXCLUSION_ID varchar(36) not null,
+  EXCLUSION_TYPE varchar(2) not null,
+  EXCLUSION_VALUE varchar(10),
+  START_TIME varchar(5) not null,
+  END_TIME varchar(5) not null,
+  ADD_DT timestamp
+);
