@@ -2,6 +2,8 @@ package com.opensqm.json;
 
 /**
  * Category
+ * 
+ * @Jim Shain
  *
  */
 public class Category {
