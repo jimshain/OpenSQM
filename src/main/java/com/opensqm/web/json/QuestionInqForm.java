@@ -1,7 +1,7 @@
 package com.opensqm.web.json;
 
 /**
- * Question inquiry form java object.
+ * Question inquiry form.
  * 
  * @author Jim Shain
  *

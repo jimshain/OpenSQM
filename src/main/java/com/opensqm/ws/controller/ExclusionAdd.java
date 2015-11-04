@@ -39,8 +39,8 @@ public class ExclusionAdd {
 	 * Exclusion add.
 	 * 
 	 * @param request
-	 * @param model
-	 * @return
+	 *            Exclusion add request message.
+	 * @return Exclusion add response message.
 	 */
 	@RequestMapping(value = "exclusionAdd", method = RequestMethod.POST)
 	public @ResponseBody String doExclusionAdd(@RequestBody String request) {
@@ -66,7 +66,6 @@ public class ExclusionAdd {
 
 		exclusionAddRs.setStatus(status);
 		response = gson.toJson(exclusionAddRs);
-		System.out.println("response = " + response);
 
 		return response;
 	}
@@ -99,7 +98,7 @@ public class ExclusionAdd {
 	}
 
 	/**
-	 * Add a exclusion to the database.
+	 * Add an exclusion to the database.
 	 * 
 	 * @param exclusion
 	 *            Exclusion

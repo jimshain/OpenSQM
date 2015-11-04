@@ -1,5 +1,7 @@
 package com.opensqm.web.controller;
 
+import java.util.UUID;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -20,6 +22,8 @@ import com.opensqm.json.QuestionDelRq;
 import com.opensqm.json.QuestionDelRs;
 import com.opensqm.json.QuestionInqRq;
 import com.opensqm.json.QuestionInqRs;
+import com.opensqm.json.QuestionListInqRq;
+import com.opensqm.json.QuestionListInqRs;
 import com.opensqm.json.QuestionModRq;
 import com.opensqm.json.QuestionModRs;
 import com.opensqm.json.RequestHeader;
@@ -27,10 +31,23 @@ import com.opensqm.json.Status;
 import com.opensqm.web.json.QuestionAddForm;
 import com.opensqm.web.json.QuestionDelForm;
 import com.opensqm.web.json.QuestionInqForm;
+import com.opensqm.web.json.QuestionListInqForm;
 import com.opensqm.web.json.QuestionModForm;
 
+/**
+ * Web controller to handle the questions page.
+ * 
+ * @author Jim Shain
+ *
+ */
 @Controller
 public class QuestionsWebController {
+	/**
+	 * Question list inquiry web service URL.
+	 */
+	// TODO: This is hard coded for now. Should come from a property file.
+	private final static String QUESTION_LIST_INQ_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/questionListInq";
+
 	/**
 	 * Question inquiry web service URL.
 	 */
@@ -55,15 +72,58 @@ public class QuestionsWebController {
 	// TODO: This is hard coded for now. Should come from a property file.
 	private final static String QUESTION_DEL_URL = "http://localhost:8080/OpenSQM-1.0/v1.0/questionDel";
 
+	/**
+	 * Process the web page get.
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "questions", method = RequestMethod.GET)
 	public String getQuestions() {
 		return "questions";
 	}
 
+	/**
+	 * Process the question list inquiry request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
+	@RequestMapping(value = "questionListInqWeb", method = RequestMethod.POST)
+	public @ResponseBody String questionListInq(@RequestBody String request) {
+		Gson gson = new Gson();
+		String json = null;
+		QuestionListInqForm questionListInqForm = null;
+		QuestionListInqRq questionListInqRq = new QuestionListInqRq();
+		QuestionListInqRs questionListInqRs = null;
+
+		try {
+			questionListInqForm = gson.fromJson(request,
+					QuestionListInqForm.class);
+			questionListInqRq.setRequestHeader(new RequestHeader());
+			questionListInqRq.getRequestHeader().setRquid(
+					UUID.randomUUID().toString());
+			json = gson.toJson(questionListInqRq);
+			json = send(QUESTION_LIST_INQ_URL, json);
+		} catch (Exception e) {
+			e.printStackTrace();
+			questionListInqRs = new QuestionListInqRs();
+			questionListInqRs.setStatus(new Status("999", e.toString()));
+			json = gson.toJson(questionListInqRs);
+		}
+		return json;
+	}
+
+	/**
+	 * Process the question inquiry request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
 	@RequestMapping(value = "questionInqWeb", method = RequestMethod.POST)
 	public @ResponseBody String questionInq(@RequestBody String request) {
 
-		System.out.println("QuestionsWebController.questionInq: Started.");
 		Gson gson = new Gson();
 		QuestionInqForm questionInqForm = null;
 		QuestionInqRq questionInqRq = new QuestionInqRq();
@@ -82,12 +142,17 @@ public class QuestionsWebController {
 			questionInqRs.setStatus(new Status("999", e.toString()));
 			json = gson.toJson(questionInqRs);
 		}
-		
-		System.out.println("QuestionsWebController.questionInq: Done.");
 
 		return json;
 	}
 
+	/**
+	 * Process the question modify request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
 	@RequestMapping(value = "questionModWeb", method = RequestMethod.POST)
 	public @ResponseBody String questionMod(@RequestBody String request) {
 
@@ -117,6 +182,13 @@ public class QuestionsWebController {
 		return json;
 	}
 
+	/**
+	 * Process the question add request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
 	@RequestMapping(value = "questionAddWeb", method = RequestMethod.POST)
 	public @ResponseBody String questionAdd(@RequestBody String request) {
 
@@ -131,7 +203,6 @@ public class QuestionsWebController {
 			questionAddForm = gson.fromJson(request, QuestionAddForm.class);
 			questionAddRq.setRequestHeader(new RequestHeader());
 			question.setText(questionAddForm.getText());
-			// question.setChoices(questionModForm.getCategoryId());
 			question.setCategoryId(questionAddForm.getCategoryId());
 			questionAddRq.setQuestion(question);
 			json = gson.toJson(questionAddRq);
@@ -146,6 +217,13 @@ public class QuestionsWebController {
 		return json;
 	}
 
+	/**
+	 * Process the question delete request.
+	 * 
+	 * @param request
+	 *            JSON request string
+	 * @return JSON response string
+	 */
 	@RequestMapping(value = "questionDelWeb", method = RequestMethod.POST)
 	public @ResponseBody String questionDel(@RequestBody String request) {
 
@@ -171,6 +249,17 @@ public class QuestionsWebController {
 		return json;
 	}
 
+	/**
+	 * Post the data to the URL.
+	 * 
+	 * @param url
+	 *            Destination URL.
+	 * @param data
+	 *            Data to post.
+	 * @return Response data
+	 * @throws Exception
+	 *             Thrown if there is an exception.
+	 */
 	private String send(String url, String data) throws Exception {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(url);
